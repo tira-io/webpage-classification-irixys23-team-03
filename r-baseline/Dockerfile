@@ -1,7 +1,5 @@
 FROM r-base:latest
 
-RUN Rscript dependencies.R
-
 WORKDIR /app
 COPY . /app
 
