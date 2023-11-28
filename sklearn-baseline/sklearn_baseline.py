@@ -29,7 +29,7 @@ def main(input_file, output_dir, model_file):
 
     # Feature extraction and classifier pipeline
     pipeline = load_model(model_file)
-    
+
     # Make predictions on the test data
     test_predictions = pipeline.predict(test_data['url'])
 
