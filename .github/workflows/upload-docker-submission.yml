@@ -1,15 +1,15 @@
 name: Upload Docker Software to TIRA
-on: 
+on:
   workflow_dispatch:
     inputs:
       dockerpath:
         description: The path to the directory where the Docker image should be build.
         required: true
-        default: trivial-baseline
+        default: r-baseline
       command:
         description: The command that is to be executed to run the software. The variable $inputDataset points to the input directory that contains the inputs.jsonl file, the variable $outputDir points to the directory where the resulting predictions.jsonl should be stored.
         required: true
-        default: python3 /baseline.py -i $inputDataset/inputs.jsonl -o $outputDir/predictions.jsonl
+        default: Rscript predict.R $inputDataset/inputs.jsonl $outputDir/predictions.jsonl model.RData
       dockerfile:
         description: The Dockerfile to build. This Dockerfile is expected to be contained within the dockerpath.
         required: false
@@ -64,7 +64,7 @@ jobs:
           	TIRA_DOCKER_FILE=${{ inputs.dockerfile }} \
           	TIRA_DOCKER_PATH=${{ inputs.dockerpath }} \
           	'TIRA_COMMAND=${{ inputs.command }}' \
-          	>> $GITHUB_ENV 
+          	>> $GITHUB_ENV
       - name: Build, test, and upload image
         run: |
           docker build -t ${{ env.IMAGE_TAG }} -f ${{ github.workspace }}/${{ env.TIRA_DOCKER_PATH }}/${{ env.TIRA_DOCKER_FILE }} ${{ github.workspace }}/${{ env.TIRA_DOCKER_PATH }}
